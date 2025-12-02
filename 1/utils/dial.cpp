@@ -2,7 +2,10 @@
 
 
 Dial::Dial() {
-    for (int i = 0; i < 100; i++) {
+    for (int i = 50; i < 100; i++) {
+        dial.push_back(i);
+    }
+    for (int i = 0; i < 50; i++) {
         dial.push_back(i);
     }
 }
