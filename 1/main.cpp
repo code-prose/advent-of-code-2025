@@ -5,6 +5,44 @@
 #include <fstream>
 #include <string>
 
+
+void p1(std::vector<std::string> &input) {
+    Dial dial;
+    int count = 0;
+    int pos;
+    for (std::string line : input) {
+        char direction = line[0];
+        int distance = std::stoi(line.substr(1));
+
+        if (direction == 'L') {
+            dial.rotateLeftp1(distance);
+            pos = dial.returnPos();
+        } else if (direction == 'R') {
+            dial.rotateRightp2(distance);
+            pos = dial.returnPos();
+        }
+        if (pos == 0) { count++; }
+    }
+
+    std::cout << count << std::endl;
+}
+
+void p2(std::vector<std::string> &input) {
+    Dial dial;
+    for (std::string line : input) {
+        char direction = line[0];
+        int distance = std::stoi(line.substr(1));
+        int pos = 0;
+
+        if (direction == 'L') {
+            dial.rotateLeftp2(distance);
+        } else if (direction == 'R') {
+            dial.rotateRightp2(distance);
+        }
+    }
+    std::cout << dial.returnCount() << std::endl;
+}
+
 int main() {
     std::vector<std::string> input;
     std::ifstream inputFile("./input.txt");
@@ -20,24 +58,8 @@ int main() {
 
     inputFile.close();
 
-    Dial dial;
-    int count = 0;
-    int pos;
-    for (std::string line : input) {
-        char direction = line[0];
-        int distance = std::stoi(line.substr(1));
-
-        if (direction == 'L') {
-            dial.rotate_left(distance);
-            pos = dial.return_pos();
-        } else if (direction == 'R') {
-            dial.rotate_right(distance);
-            pos = dial.return_pos();
-        }
-        if (pos == 0) { count++; } 
-    }
-
-    std::cout << count << std::endl;
+    p1(input);
+    p2(input);
 
     return 0;
 }

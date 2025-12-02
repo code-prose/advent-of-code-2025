@@ -8,13 +8,22 @@ Dial::Dial() {
     for (int i = 0; i < 50; i++) {
         dial.push_back(i);
     }
+    count = 0;
 }
 
-int Dial::return_pos() {
+void Dial::increment(int incr) {
+    count += incr;
+}
+
+int Dial::returnCount() {
+    return count;
+}
+
+int Dial::returnPos() {
     return dial[0];
 }
 
-void Dial::rotate_left(int amount) {
+void Dial::rotateLeftp1(int amount) {
     for (int i = 0; i < amount; i++) {
         int val;
         val = dial.back();
@@ -23,11 +32,35 @@ void Dial::rotate_left(int amount) {
     }
 }
 
-void Dial::rotate_right(int amount) {
+void Dial::rotateLeftp2(int amount) {
+    for (int i = 0; i < amount; i++) {
+        int val;
+        val = dial.back();
+        dial.pop_back();
+        if (val == 0) {
+            increment(1);
+        }
+        dial.push_front(val);
+    }
+}
+
+void Dial::rotateRightp1(int amount) {
     for (int i = 0; i < amount; i++) {
         int val;
         val = dial.front();
         dial.pop_front();
+        dial.push_back(val);
+    }
+}
+
+void Dial::rotateRightp2(int amount) {
+    for (int i = 0; i < amount; i++) {
+        int val;
+        val = dial.front();
+        dial.pop_front();
+        if (val == 0) {
+            increment(1);
+        }
         dial.push_back(val);
     }
 }
