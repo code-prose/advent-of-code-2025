@@ -35,15 +35,11 @@ int main() {
             std::string str = std::to_string(i);
             bool isInvalid = false;
 
-            // Part 2: Check if the number is a pattern repeated at least twice
-            // Try each possible pattern length
             for (size_t patternLen = 1; patternLen <= str.length() / 2; patternLen++) {
-                // Check if string length is divisible by pattern length
                 if (str.length() % patternLen == 0) {
                     std::string pattern = str.substr(0, patternLen);
                     bool matches = true;
 
-                    // Check if the entire string is made of this pattern repeated
                     for (size_t pos = patternLen; pos < str.length(); pos += patternLen) {
                         if (str.substr(pos, patternLen) != pattern) {
                             matches = false;

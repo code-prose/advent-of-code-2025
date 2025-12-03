@@ -33,7 +33,6 @@ int main() {
         std::vector<long long> range = splitString(input, "-");
         for (long long i = range.at(0); i <= range.at(1); i++) {
             std::string str = std::to_string(i);
-            // Part 1: Check if the number is a pattern repeated exactly twice
             if (str.length() % 2 == 0) {
                 size_t half = str.length() / 2;
                 if (str.substr(0, half) == str.substr(half)) {
