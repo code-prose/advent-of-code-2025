@@ -9,7 +9,7 @@
 void p1(std::vector<std::string> &input) {
     Dial dial;
     int count = 0;
-    int pos;
+    int pos = 0;
     for (std::string line : input) {
         char direction = line[0];
         int distance = std::stoi(line.substr(1));
@@ -18,7 +18,7 @@ void p1(std::vector<std::string> &input) {
             dial.rotateLeftp1(distance);
             pos = dial.returnPos();
         } else if (direction == 'R') {
-            dial.rotateRightp2(distance);
+            dial.rotateRightp1(distance);
             pos = dial.returnPos();
         }
         if (pos == 0) { count++; }
@@ -32,7 +32,6 @@ void p2(std::vector<std::string> &input) {
     for (std::string line : input) {
         char direction = line[0];
         int distance = std::stoi(line.substr(1));
-        int pos = 0;
 
         if (direction == 'L') {
             dial.rotateLeftp2(distance);

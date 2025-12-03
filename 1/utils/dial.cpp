@@ -58,9 +58,9 @@ void Dial::rotateRightp2(int amount) {
         int val;
         val = dial.front();
         dial.pop_front();
-        if (val == 0) {
+        dial.push_back(val);
+        if (dial.front() == 0) {
             increment(1);
         }
-        dial.push_back(val);
     }
 }
