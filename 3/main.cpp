@@ -1,13 +1,12 @@
 #include <fstream>
 #include <iostream>
 #include <string>
-#include <cmath>
 
 void pt1(std::vector< std::vector<int> > &inputVectors);
 void pt2(std::vector< std::vector<int> > &InputVectors);
-long long recursiveFind(std::vector<int> &vec, int remaining, size_t startingIdx);
-long long intPower(int base, int exp); 
-
+long long recursiveFind(std::vector<int> &vec, int remaining,
+                        size_t startingIdx);
+long long intPower(int base, int exp);
 
 int main() {
   std::vector< std::vector<int> > InputVectors;
@@ -26,8 +25,8 @@ int main() {
   }
   inputFile.close();
   pt1(InputVectors);
+  pt2(InputVectors);
 }
-
 
 void pt1(std::vector< std::vector<int> > &InputVectors) {
   long long output = 0;
@@ -56,37 +55,37 @@ void pt1(std::vector< std::vector<int> > &InputVectors) {
   std::cout << output << std::endl;
 }
 
-
 void pt2(std::vector< std::vector<int> > &InputVectors) {
-    long long result = 0;
-    for (auto &vec : InputVectors) {
-         result += recursiveFind(vec, 12, 0);
-    }
-    std::cout << result << std::endl;
+  long long result = 0;
+  for (auto &vec : InputVectors) {
+    result += recursiveFind(vec, 12, 0);
+  }
+  std::cout << result << std::endl;
 }
 
+long long recursiveFind(std::vector<int> &vec, int remaining,
+                        size_t startingIdx) {
+  if (remaining == 0) {
+    return 0;
+  }
+  int highest = 0;
+  size_t HighestIdx = startingIdx;
 
-long long recursiveFind(std::vector<int> &vec, int remaining, size_t startingIdx) {
-    if (remaining == 0) {
-        return 0;
+  for (size_t i = startingIdx; i < vec.size() - remaining + 1; i++) {
+    int t_highest = highest;
+    highest = std::max(highest, vec[i]);
+    if (highest != t_highest) {
+      HighestIdx = i;
     }
-    int highest = 0;
-    size_t HighestIdx = startingIdx;
-
-    for (size_t i = startingIdx; i < vec.size() - remaining + 1; i++) {
-        int t_highest = highest;
-        highest = std::max(highest, vec[i]);
-        if (highest != t_highest) {
-            HighestIdx = i;
-        }
-    }
-    return ((long long)highest * intPower(10, remaining - 1)) + recursiveFind(vec, remaining - 1, HighestIdx + 1);
+  }
+  return ((long long)highest * intPower(10, remaining - 1)) +
+         recursiveFind(vec, remaining - 1, HighestIdx + 1);
 }
 
 long long intPower(int base, int exp) {
-    long long res = 1;
-    for (int i = 0; i < exp; i++) {
-        res *= base;
-    }
-    return res;
+  long long res = 1;
+  for (int i = 0; i < exp; i++) {
+    res *= base;
+  }
+  return res;
 }
