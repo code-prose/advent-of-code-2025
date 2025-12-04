@@ -6,6 +6,8 @@
 void pt1(std::vector< std::vector<int> > &inputVectors);
 void pt2(std::vector< std::vector<int> > &InputVectors);
 long long recursiveFind(std::vector<int> &vec, int remaining, size_t startingIdx);
+long long intPower(int base, int exp); 
+
 
 int main() {
   std::vector< std::vector<int> > InputVectors;
@@ -78,5 +80,13 @@ long long recursiveFind(std::vector<int> &vec, int remaining, size_t startingIdx
             HighestIdx = i;
         }
     }
-    return ((long long)highest * pow(10, remaining - 1)) + recursiveFind(vec, remaining - 1, HighestIdx + 1);
+    return ((long long)highest * intPower(10, remaining - 1)) + recursiveFind(vec, remaining - 1, HighestIdx + 1);
+}
+
+long long intPower(int base, int exp) {
+    long long res = 1;
+    for (int i = 0; i < exp; i++) {
+        res *= base;
+    }
+    return res;
 }
