@@ -14,7 +14,7 @@ void parseInput(ReadVec &InVec, RangeVec &rangeVector, FreshVec &freshVec);
 
 int main() {
   ReadVec InputVector;
-  std::ifstream inputFile("./test_input.txt");
+  std::ifstream inputFile("./input.txt");
   if (!inputFile.is_open()) {
     std::cerr << "Error opening file!" << std::endl;
     return 1;
@@ -72,7 +72,7 @@ void pt1(RangeVec &rangeVector, FreshVec &freshVector) {
         }
     }
 
-    std::cout << "Part 1: " << freshCount << " ingredient IDs are fresh" << std::endl;
+    std::cout << freshCount <<  std::endl;
 }
 
 void pt2(RangeVec & /* rangeVector */, FreshVec & /* freshVector */) {
