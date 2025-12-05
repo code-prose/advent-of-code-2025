@@ -38,22 +38,44 @@ int main() {
 
 void parseInput(ReadVec &InVec, RangeVec &rangeVector, FreshVec &freshVector) {
     for (auto &str : InVec) {
+        if (str.empty()) {
+            continue;
+        }
         size_t pos = str.find("-");
         if (pos == std::string::npos) {
-            freshVector.push_back(str);
+            freshVector.push_back(std::stoll(str));
         } else {
-            std::tuple<long long, long long> temp(str.substr(0, pos), str.substr(pos + 1));
-            rangeVector.push_back(temp);
+            long long start = std::stoll(str.substr(0, pos));
+            long long end = std::stoll(str.substr(pos + 1));
+            rangeVector.push_back(std::make_tuple(start, end));
         }
     }
 }
 
 void pt1(RangeVec &rangeVector, FreshVec &freshVector) {
-    std::cout << rangeVector[0] << " " << freshVector[0] << std::endl;
-    return;
+    int freshCount = 0;
+
+    for (auto ingredientID : freshVector) {
+        bool isFresh = false;
+        for (auto &range : rangeVector) {
+            long long start = std::get<0>(range);
+            long long end = std::get<1>(range);
+
+            if (ingredientID >= start && ingredientID <= end) {
+                isFresh = true;
+                break;
+            }
+        }
+
+        if (isFresh) {
+            freshCount++;
+        }
+    }
+
+    std::cout << "Part 1: " << freshCount << " ingredient IDs are fresh" << std::endl;
 }
 
-void pt2(RangeVec &rangeVector, FreshVec &freshVector) {
-    std::cout << rangeVector[0] << " " << freshVector[0] << std::endl;
+void pt2(RangeVec & /* rangeVector */, FreshVec & /* freshVector */) {
+    // Part 2 to be implemented
     return;
 }
