@@ -1,6 +1,7 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <algorithm>
 
 
 using ReadVec = std::vector<std::string>;
@@ -75,7 +76,32 @@ void pt1(RangeVec &rangeVector, FreshVec &freshVector) {
     std::cout << freshCount <<  std::endl;
 }
 
-void pt2(RangeVec & /* rangeVector */, FreshVec & /* freshVector */) {
-    // Part 2 to be implemented
-    return;
+void pt2(RangeVec &rangeVector) {
+    std::sort(rangeVector.begin(), rangeVector.end(),
+              [](const auto &a, const auto &b) {
+                  return std::get<0>(a) < std::get<0>(b);
+              });
+
+    RangeVec merged;
+    merged.push_back(rangeVector[0]);
+
+    for (size_t i = 1; i < rangeVector.size(); i++) {
+        long long currentStart = std::get<0>(rangeVector[i]);
+        long long currentEnd = std::get<1>(rangeVector[i]);
+        long long lastEnd = std::get<1>(merged.back());
+
+        if (currentStart <= lastEnd + 1) {
+            std::get<1>(merged.back()) = std::max(lastEnd, currentEnd);
+        } else {
+            merged.push_back(rangeVector[i]);
+        }
+    }
+
+    long long totalCount = 0;
+    for (auto &range : merged) {
+        long long start = std::get<0>(range);
+        long long end = std::get<1>(range);
+        totalCount += (end - start + 1);
+    }
+    std::cout << totalCount << std::endl;
 }
