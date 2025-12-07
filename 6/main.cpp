@@ -4,11 +4,12 @@
 #include <algorithm>
 #include <sstream>
 #include <vector>
+#include <cmath>
 
 
 using ReadVec = std::vector< std::vector<int> >;
 void pt1(ReadVec &InputVec);
-void pt2();
+void pt2(std::vector<std::string> &lines);
 std::vector<std::string> splitStringStream(const std::string& s, char delimiter);
 
 
@@ -46,7 +47,7 @@ int main() {
         InputVector.push_back(temp);
   }
   pt1(InputVector);
-  // pt2();
+  pt2(lines);
 }
 void pt1(ReadVec &InputVec) {
     long long total = 0;
@@ -70,6 +71,83 @@ void pt1(ReadVec &InputVec) {
         total += res;
     }
     std::cout << total << std::endl;
+}
+
+void pt2(std::vector<std::string> &lines) {
+    long long grandTotal = 0;
+    int operatorRow = lines.size() - 1;
+
+    size_t maxLen = 0;
+    for (const auto &line : lines) {
+        maxLen = std::max(maxLen, line.length());
+    }
+    for (auto &line : lines) {
+        while (line.length() < maxLen) {
+            line += ' ';
+        }
+    }
+
+    std::vector<long long> problemNumbers;
+    char currentOp = ' ';
+    bool inProblem = false;
+
+    for (int col = maxLen - 1; col >= -1; col--) {
+        bool isSpaceColumn = true;
+
+        if (col >= 0) {
+            for (int row = 0; row <= operatorRow; row++) {
+                if (lines[row][col] != ' ') {
+                    isSpaceColumn = false;
+                    break;
+                }
+            }
+
+            if (!isSpaceColumn) {
+                char op = lines[operatorRow][col];
+                if (op != ' ' && (op == '+' || op == '*')) {
+                    if (!inProblem) {
+                        currentOp = op;
+                        inProblem = true;
+                    }
+                }
+
+                std::string digitString = "";
+                for (int row = 0; row < operatorRow; row++) {
+                    if (lines[row][col] != ' ') {
+                        digitString += lines[row][col];
+                    }
+                }
+
+                if (!digitString.empty()) {
+                    long long num = std::stoll(digitString);
+                    problemNumbers.push_back(num);
+                }
+            }
+        }
+
+        if ((isSpaceColumn || col == -1) && inProblem) {
+            long long result = 0;
+
+            if (currentOp == '*') {
+                result = 1;
+                for (auto num : problemNumbers) {
+                    result *= num;
+                }
+            } else if (currentOp == '+') {
+                result = 0;
+                for (auto num : problemNumbers) {
+                    result += num;
+                }
+            }
+            grandTotal += result;
+
+            problemNumbers.clear();
+            currentOp = ' ';
+            inProblem = false;
+        }
+    }
+
+    std::cout << grandTotal << std::endl;
 }
 
 std::vector<std::string> splitStringStream(const std::string& s, char delimiter) {
