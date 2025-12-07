@@ -17,4 +17,4 @@ $(TARGET): $(OBJECTS)
 
 
 clean:
-	rm -rf $(OBJECTS) $(TARGETS)
+	rm -rf $(OBJECTS) $(TARGET)

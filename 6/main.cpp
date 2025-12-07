@@ -24,15 +24,25 @@ int main() {
   while (std::getline(inputFile, line)) {
         std::vector<int> temp;
         std::vector<std::string> results = splitStringStream(line, ' ');
-        for (auto &res: results) {
-            temp.push_back(stoi(res));
+        if (i == 3) {
+            for (auto &res: results) {
+                if (!res.empty()) {
+                    temp.push_back((char)res[0]);
+                }
+            }
+        } else {
+            for (auto &res: results) {
+                if (!res.empty()) {
+                    std::cout << res << std::endl;
+                    temp.push_back(stoi(res));
+                }
+            }
         }
         InputVector.push_back(temp);
+        i++;
   }
-  // std::cout << InputVector << std::endl;
   // pt1();
   // pt2();
-
 }
 
 std::vector<std::string> splitStringStream(const std::string& s, char delimiter) {
