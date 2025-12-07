@@ -4,7 +4,7 @@ SRC_DIR = src
 BUILD_DIR = build
 BIN_DIR = bin
 
-TARGET = day5
+TARGET = day6
 SOURCES = main.cpp
 
 OBJECTS = $(SOURCES:.cpp=.o)
