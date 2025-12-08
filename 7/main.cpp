@@ -6,6 +6,7 @@
 #include <vector>
 #include <cmath>
 #include <set>
+#include <map>
 
 
 using ReadVec = std::vector<std::string>;
@@ -23,9 +24,8 @@ int main() {
   std::string line;
   while (std::getline(inputFile, line)) {
         InputVector.push_back(line);
-        std::cout << line << std::endl;
   }
-  pt1(InputVector);
+  // pt1(InputVector);
   pt2(InputVector);
 }
 
@@ -60,31 +60,37 @@ void pt1(ReadVec InputVector) {
     return;
 }
 
-int countPaths(const ReadVec& grid, int row, int col, std::set<std::pair<int, int>>& pathVisited) {
-    if (col < 0 || col >= (int)grid[0].size() || row >= (int)grid.size()) {
-        return 1;  // This is one complete timeline/path
-    }
-
-    if (pathVisited.count({row, col})) {
+// Count number of distinct paths from (row, col) to bottom
+// Using memoization to avoid recomputing
+long long countPaths(const ReadVec& grid, int row, int col,
+                     std::map<std::pair<int, int>, long long>& memo) {
+    // Out of bounds
+    if (col < 0 || col >= (int)grid[0].size()) {
         return 0;
     }
-    pathVisited.insert({row, col});
+    if (row >= (int)grid.size()) {
+        return 1;  // reached bottom - this is one complete path
+    }
+
+    // Check memoization
+    auto key = std::make_pair(row, col);
+    if (memo.count(key)) {
+        return memo[key];
+    }
 
     char cell = grid[row][col];
-    int totalPaths = 0;
+    long long result = 0;
 
     if (cell == '.' || cell == 'S' || cell == '|') {
-        totalPaths = countPaths(grid, row + 1, col, pathVisited);
+        result = countPaths(grid, row + 1, col, memo);
     }
     else if (cell == '^') {
-        std::set<std::pair<int, int>> leftPath = pathVisited;
-        std::set<std::pair<int, int>> rightPath = pathVisited;
-
-        totalPaths = countPaths(grid, row + 1, col - 1, leftPath) +
-                     countPaths(grid, row + 1, col + 1, rightPath);
+        result = countPaths(grid, row + 1, col - 1, memo) +
+                 countPaths(grid, row + 1, col + 1, memo);
     }
 
-    return totalPaths;
+    memo[key] = result;
+    return result;
 }
 
 void pt2(ReadVec InputVector) {
@@ -100,8 +106,8 @@ void pt2(ReadVec InputVector) {
         if (startRow != -1) break;
     }
 
-    std::set<std::pair<int, int>> pathVisited;
-    int count = countPaths(InputVector, startRow, startCol, pathVisited);
+    std::map<std::pair<int, int>, long long> memo;
+    long long count = countPaths(InputVector, startRow, startCol, memo);
 
     std::cout << count << std::endl;
 }
