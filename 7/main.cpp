@@ -5,11 +5,12 @@
 #include <sstream>
 #include <vector>
 #include <cmath>
+#include <set>
 
 
 using ReadVec = std::vector<std::string>;
 void pt1(ReadVec InputVector);
-// void pt2();
+void pt2(ReadVec InputVector);
 
 
 int main() {
@@ -25,7 +26,7 @@ int main() {
         std::cout << line << std::endl;
   }
   pt1(InputVector);
-  // pt2();
+  pt2(InputVector);
 }
 
 void pt1(ReadVec InputVector) {
@@ -57,4 +58,50 @@ void pt1(ReadVec InputVector) {
     }
     std::cout << count << std::endl;
     return;
+}
+
+int countPaths(const ReadVec& grid, int row, int col, std::set<std::pair<int, int>>& pathVisited) {
+    if (col < 0 || col >= (int)grid[0].size() || row >= (int)grid.size()) {
+        return 1;  // This is one complete timeline/path
+    }
+
+    if (pathVisited.count({row, col})) {
+        return 0;
+    }
+    pathVisited.insert({row, col});
+
+    char cell = grid[row][col];
+    int totalPaths = 0;
+
+    if (cell == '.' || cell == 'S' || cell == '|') {
+        totalPaths = countPaths(grid, row + 1, col, pathVisited);
+    }
+    else if (cell == '^') {
+        std::set<std::pair<int, int>> leftPath = pathVisited;
+        std::set<std::pair<int, int>> rightPath = pathVisited;
+
+        totalPaths = countPaths(grid, row + 1, col - 1, leftPath) +
+                     countPaths(grid, row + 1, col + 1, rightPath);
+    }
+
+    return totalPaths;
+}
+
+void pt2(ReadVec InputVector) {
+    int startRow = -1, startCol = -1;
+    for (size_t i = 0; i < InputVector.size(); i++) {
+        for (size_t j = 0; j < InputVector[i].size(); j++) {
+            if (InputVector[i][j] == 'S') {
+                startRow = i;
+                startCol = j;
+                break;
+            }
+        }
+        if (startRow != -1) break;
+    }
+
+    std::set<std::pair<int, int>> pathVisited;
+    int count = countPaths(InputVector, startRow, startCol, pathVisited);
+
+    std::cout << count << std::endl;
 }
