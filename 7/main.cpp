@@ -25,7 +25,7 @@ int main() {
   while (std::getline(inputFile, line)) {
         InputVector.push_back(line);
   }
-  // pt1(InputVector);
+  pt1(InputVector);
   pt2(InputVector);
 }
 
@@ -60,19 +60,15 @@ void pt1(ReadVec InputVector) {
     return;
 }
 
-// Count number of distinct paths from (row, col) to bottom
-// Using memoization to avoid recomputing
 long long countPaths(const ReadVec& grid, int row, int col,
                      std::map<std::pair<int, int>, long long>& memo) {
-    // Out of bounds
     if (col < 0 || col >= (int)grid[0].size()) {
         return 0;
     }
     if (row >= (int)grid.size()) {
-        return 1;  // reached bottom - this is one complete path
+        return 1;
     }
 
-    // Check memoization
     auto key = std::make_pair(row, col);
     if (memo.count(key)) {
         return memo[key];
