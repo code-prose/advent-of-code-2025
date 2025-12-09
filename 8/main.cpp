@@ -19,6 +19,7 @@ std::vector<size_t> getCircuitSizes(const std::vector<size_t> &parent,
                                     const std::vector<size_t> &size);
 
 void pt1(const ReadVec &InputVector);
+void pt2(const ReadVec &InputVector);
 
 int main() {
   ReadVec InputVector;
@@ -35,6 +36,7 @@ int main() {
     InputVector.push_back(tup);
   }
   pt1(InputVector);
+  pt2(InputVector);
 }
 
 void pt1(const ReadVec &InputVector) {
@@ -85,7 +87,55 @@ void pt1(const ReadVec &InputVector) {
   std::cout << "Part 1: " << result << std::endl;
 }
 
-void pt2(ReadVec InputVector);
+void pt2(const ReadVec &InputVector) {
+  MinHeap pq;
+  for (size_t i = 0; i < InputVector.size(); i++) {
+    for (size_t j = i + 1; j < InputVector.size(); j++) {
+      if (i == j)
+        continue;
+      long long a = std::get<0>(InputVector[i]) - std::get<0>(InputVector[j]);
+      long long b = std::get<1>(InputVector[i]) - std::get<1>(InputVector[j]);
+      long long c = std::get<2>(InputVector[i]) - std::get<2>(InputVector[j]);
+      a = a * a;
+      b = b * b;
+      c = c * c;
+      long long distSq = a + b + c;
+      DistancePair dp = {distSq, {i, j}};
+      pq.push(dp);
+    }
+  }
+
+  std::vector<size_t> parent;
+  std::vector<size_t> size;
+  parent.resize(InputVector.size());
+  size.resize(InputVector.size());
+  for (size_t i = 0; i < InputVector.size(); i++) {
+    parent[i] = i;
+    size[i] = 1;
+  }
+
+  size_t num_circuits = InputVector.size();
+  size_t last_i = 0, last_j = 0;
+
+  while (!pq.empty() && num_circuits > 1) {
+    DistancePair item = pq.top();
+    pq.pop();
+    std::pair<size_t, size_t> indices = item.second;
+    size_t parent_n1 = findParent(indices.first, parent);
+    size_t parent_n2 = findParent(indices.second, parent);
+    if (parent_n1 != parent_n2) {
+      mergeTree(indices.first, indices.second, parent, size);
+      num_circuits--;
+      last_i = indices.first;
+      last_j = indices.second;
+    }
+  }
+
+  int x1 = std::get<0>(InputVector[last_i]);
+  int x2 = std::get<0>(InputVector[last_j]);
+  long long result = static_cast<long long>(x1) * static_cast<long long>(x2);
+  std::cout << "Part 2: " << result << std::endl;
+}
 
 std::vector<std::string> splitStringStream(const std::string &s,
                                            char delimiter) {
